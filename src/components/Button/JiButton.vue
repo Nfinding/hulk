@@ -1,12 +1,17 @@
 <template>
   <div class="ji-button">
-    <a-button
+    <!-- <a-button
       :class="`ji-button--` + type"
       @click="$emit('click', $event)"
       v-bind="$attrs"
     >
       <slot></slot>
-    </a-button>
+    </a-button> -->
+    <slot name="ddd">
+      <div>
+        <slot name="miss">mmmmmm</slot>
+      </div>
+    </slot>
   </div>
 </template>
 

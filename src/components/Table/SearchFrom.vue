@@ -1,8 +1,18 @@
 <template>
   <div class="ji-table-search">
     <a-form ref="searchForm" :model="formState" layout="inline">
+      <!-- 支持自定义元素 -->
+      <slot
+        v-for="slot in slotNames"
+        :key="slot"
+        :name="slot"
+        :formState="formState"
+      ></slot>
+
       <a-form-item
-        v-for="(item, index) in formOptions"
+        v-for="(item, index) in formOptions.filter(
+          (item) => !!item.search.type
+        )"
         :key="index"
         :label="item.title"
       >
@@ -10,11 +20,13 @@
           v-if="item.search.type === 'input'"
           v-model:value="formState[item.key]"
           :placeholder="`请输入${item.title}`"
+          v-bind="item.search.attrs"
         />
         <a-select
           v-else-if="item.search.type === 'select'"
           v-model:value="formState[item.key]"
           :placeholder="`请选择${item.title}`"
+          v-bind="item.search.attrs"
         >
           <a-select-option
             v-for="(opt, i) in item.search.options"
@@ -29,7 +41,7 @@
           v-model:value="formState[item.key]"
           valueFormat="YYYY-MM-DD HH:mm:ss"
           format="YYYY-MM-DD HH:mm:ss"
-          v-bind="item.search.options"
+          v-bind="item.search.attrs"
         ></component>
       </a-form-item>
       <a-form-item label="Activity time"> </a-form-item>
@@ -45,18 +57,10 @@
 
 <script lang="ts">
 import { ColumnType } from "./index";
-import { ref, toRaw, defineComponent, watch, computed, toRef } from "vue";
+import { ref, toRaw, defineComponent, computed, toRef, onUpdated } from "vue";
 import { Form } from "ant-design-vue";
 const useForm = Form.useForm;
-interface FormState {
-  name: string;
-  region: string | undefined;
-  date1: any;
-  delivery: boolean;
-  type: string[];
-  resource: string;
-  desc: string;
-}
+
 export default defineComponent({
   name: "JiSearch",
   inheritAttrs: false,
@@ -67,11 +71,15 @@ export default defineComponent({
     formOptions: { type: Array, required: true },
   },
   emits: ["submit", "cancel"],
-  created() {
-    // console.log("$$$", this.$attrs);
-  },
-  setup(props, context) {
-    const { emit } = context;
+  setup(props, { emit, slots }) {
+    // 表单插槽统计；
+    const slotNames = ref<string[]>([]);
+    onUpdated(() => {
+      for (const key in slots) {
+        slotNames.value.push(key);
+      }
+    });
+
     const formData: { [key: string]: any } = ref({});
     const rulesRef = ref({});
     const formOptions = toRef(props, "formOptions");
@@ -79,22 +87,30 @@ export default defineComponent({
     let resetFields = computed(() => {
       formOptions.value.forEach((item: any) => {
         if (item.search.type === "input") formData.value[item.key] = "";
-        if (item.search.type === "select" || item.search.type === "time")
+        if (
+          item.search.type === "select" ||
+          item.search.type === "time" ||
+          item.search.slot
+        ) {
           formData.value[item.key] = undefined;
+        }
       });
       return useForm(formData, rulesRef).resetFields;
     });
 
     // 回调事件
     const onSubmit = () => {
+      console.log("---FFFF---", formData.value);
       emit("submit", toRaw(formData.value));
     };
     const onCancel = () => {
       resetFields.value();
       emit("cancel", toRaw(formData.value));
     };
+
     return {
       formState: formData,
+      slotNames,
       onSubmit,
       onCancel,
     };
@@ -102,20 +118,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-a {
-  color: #42b983;
-}
-
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
-}
-
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
-}
-</style>
+<style scoped></style>

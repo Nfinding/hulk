@@ -8,7 +8,16 @@
         :cancel="cancel"
         @cancel="$emit('cancel', $event)"
         @submit="$emit('submit', $event)"
-      />
+      >
+        <!-- 支持表单自定义元素 -->
+        <template
+          v-for="slot in formSlotNames"
+          :key="slot"
+          v-slot:[slot]="{ formState }"
+        >
+          <slot :name="slot" :formState="formState"></slot>
+        </template>
+      </search-from>
     </slot>
     <slot name="handle">
       <a-row justify="end">
@@ -58,7 +67,7 @@
 <script lang="ts">
 import { ColumnType } from "./index";
 import SearchFrom from "./SearchFrom.vue";
-import { ref, toRef, defineComponent, computed } from "vue";
+import { ref, toRef, defineComponent, computed, toRaw } from "vue";
 
 // 自定义组件默认支持类型
 const customComponentMap = new Map([
@@ -87,9 +96,7 @@ export default defineComponent({
 
     // JiTable插槽统计 为插入a-table对应插槽内；
     const slotNames = ref<string[]>([]);
-    for (const key in slots) {
-      slotNames.value.push(key);
-    }
+    const formSlotNames = ref<string[]>([]);
 
     // 过滤配置自定义表格元素内容
     const btnOptions = ref([]);
@@ -109,7 +116,17 @@ export default defineComponent({
             item.slots = { customRender: customComponentMap.get(item.type) };
           }
         }
-        console.log("---item---", item);
+
+        // JiTable插槽统计 为插入a-table对应插槽内；｜ search-from对应插槽内
+        for (const key in slots) {
+          if (item.search && item.search.slot) {
+            formSlotNames.value.push(item.search.slot);
+            // 移除slots中from表单的slots 否则将添加进table slot中
+            if (item.search.slot !== key) {
+              slotNames.value.push(key);
+            }
+          }
+        }
         return item;
       });
     });
@@ -121,7 +138,15 @@ export default defineComponent({
         return columns.value.filter((item: any) => !!item.search);
       });
     }
-    return { slotNames, formOptions, formatColumns, btnOptions, imgOptions };
+
+    return {
+      slotNames,
+      formSlotNames,
+      formOptions,
+      formatColumns,
+      btnOptions,
+      imgOptions,
+    };
   },
 });
 </script>

@@ -72,89 +72,17 @@ import 'slbasic/dist/style.css'
 ...
 ```
 
-### JiTable 用法
-
-默认支持表单，其中默认支持 name 为 search 的 slot;
-
-```
-type search = {
-  type: 'input' | 'select' : 'time'
-  options?: {name:string;value:string}[] | {time:'range'|'time'|'date';showTime?:boolean;format?:string;valueFormat?:string}
-}
-searchVisible 为 true 时，需在 columns 对应表格字段中添加 search 字段；并且注入cancel 和 submit方法（方法返回form表单数据）
-form表单暂时支持类型 input
-select（options: {name: string; value: string}[]）
-time(options: { time:'range'|'time'|'date'; showTime?:Object | Boolean; format?:string; valueFormat?:string })
-```
-
-```
-  columns: [
-    {
-      ...
-      // 添加search字段
-      search: {
-        type: "input",
-      },
-    }
-    {
-      ...
-      search: {
-        type: "select",
-        options: [
-          {
-            name: '',
-            value: '',
-          }
-          ...
-        ],
-      },
-    },
-    {
-      ...
-      search: {
-        type: "time",
-        options: {
-          type: "time",
-          showTime: false,//非time情况下默认不展示时间选择
-          format: "YYYY-MM-DD HH:mm:ss",//默认值
-          valueFormat: "YYYY-MM-DD HH:mm:ss",//默认值
-        },
-      },
-    }
-  ]
-```
-
-默认支持表格内容组件，其中暂提供 type 为 'button' | 'image'
-
-```
-使用方式：
-columns: [
-    {
-      ...
-      // 添加type字段,标示此列内容为button元素，
-      type: 'button',
-      options: [
-        {
-          name: '删除', //button名
-          emit: 'deleteFn' //button 点击报漏事件（在Ji-table 标签中添加emit事件接收）
-          ...//a-button 属性等
-        }
-      ]
-    }
-    {
-      ...
-      type: 'image',
-      options: {
-        ...// a-image 属性等
-      }
-    },
-  ]
-```
+[JiTable 用法](https://gitlab.jiliguala.com/h5/avengers/slbasic/-/tree/master/src/components/Table)
 
 ## 五、TODO
 
-- [ ] 表格默认支持操作栏
-- [ ] 文档示例
+- [ ] 表格
+- [ ] 表单
+- [ ] 海报
+- [ ] 视频、图片上传、预览、删除、排序
+- [ ] 视频播放、视频缓存及播放
+- [ ] pdf、word、excle 文件格式的查看、下载
+- [ ] 面包屑
 - [ ] 更改日志
 - [ ] 文档部署
 - [ ] 按需引入

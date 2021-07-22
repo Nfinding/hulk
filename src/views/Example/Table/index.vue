@@ -11,14 +11,26 @@
     @deleteFn="onDeleteFn"
     @viewFn="onViewFn"
   >
+    <template #sex="{ formState }">
+      <a-form-item label="性别">
+        <a-select v-model:value="formState.sex" placeholder="请选择性别">
+          <a-select-option
+            v-for="(opt, i) in sexOptions"
+            :key="i"
+            :value="opt.value"
+            >{{ opt.name }}</a-select-option
+          >
+        </a-select>
+      </a-form-item>
+    </template>
     <!-- <template #img="{ record, index }">
       <a-space>
         <a-button>Miss</a-button>
         <a-button>{{ record.name }}</a-button>
         <a-button>{{ index }}</a-button>
       </a-space>
-    </template>
-    <template #btn="{ record, index }">
+    </template> -->
+    <!-- <template #btn="{ record, index }">
       <a-space>
         <a-button>Button</a-button>
         <a-button>{{ record.name }}</a-button>
@@ -28,13 +40,26 @@
   </ji-table>
 </template>
 <script lang="ts">
+import JiButton from "@/components/Button/JiButton.vue";
 import { defineComponent, reactive } from "vue";
 export default defineComponent({
+  components: { JiButton },
   setup: () => {
+    const sexOptions = [
+      {
+        value: "1",
+        name: "男",
+      },
+      {
+        value: "0",
+        name: "女",
+      },
+    ];
     const dataSource = reactive([
       {
         key: "1",
         name: "胡彦斌",
+        sex: "男",
         age: 32,
         address: "西湖区湖底公园1号",
         review:
@@ -43,6 +68,7 @@ export default defineComponent({
       {
         key: "2",
         name: "姜子牙",
+        sex: "女",
         age: 42,
         address:
           "西湖区湖底公园1号西湖区湖底公园1号西湖区湖底公园1号西湖区湖底公园1号西湖区湖底公园1号",
@@ -71,6 +97,7 @@ export default defineComponent({
       onDeleteFn,
       onViewFn,
       dataSource,
+      sexOptions,
       columns: [
         {
           title: "姓名",
@@ -80,6 +107,15 @@ export default defineComponent({
           width: 100,
           search: {
             type: "input",
+            attrs: {},
+          },
+        },
+        {
+          title: "性别",
+          dataIndex: "sex",
+          key: "sex",
+          search: {
+            slot: "sex",
           },
         },
         {
@@ -90,6 +126,7 @@ export default defineComponent({
           sorter: (a: any, b: any) => a.age - b.age,
           search: {
             type: "select",
+            attrs: {},
             options: [
               {
                 name: "32",
@@ -109,7 +146,7 @@ export default defineComponent({
           ellipsis: true,
           search: {
             type: "time",
-            options: {
+            attrs: {
               type: "range",
               showTime: false,
               format: "",
