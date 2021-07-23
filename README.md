@@ -31,7 +31,7 @@ npm run build
 
 ## 体验 demo
 
-安装 npm 包
+**安装 npm 包**
 
 ```
 yarn add https://gitlab.jiliguala.com/h5/basic-admin/admin-project-base.git#feature/table
@@ -39,7 +39,7 @@ or
 npm install https://gitlab.jiliguala.com/h5/basic-admin/admin-project-base.git#feature/table
 ```
 
-组件里使用
+**组件里使用**
 
 ```
 import Antd from 'ant-design-vue'

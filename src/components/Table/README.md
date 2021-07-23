@@ -37,6 +37,15 @@
 
 ### 默认支持表单搜索（位于表格顶部，搜索）其中默认支持 name 为 search 的 slot;
 
+- searchVisible 为 true 时(默认为 false)
+- 需在 columns 对应表格字段中添加 search 字段；并且**注入 cancel 和 submit 方法**（方法返回 form 表单数据);
+
+- form 支持类型:
+  - input
+  - select（options: {name: string; value: string}[]）
+  - time(options: { time:'range'|'time'|'date'; showTime?:Object | Boolean; format?:string; valueFormat?:string })
+  - 自定义表单组件（下边讲述使用方式）
+
 ```
 type search = {
   type: 'input' | 'select' : 'time'
@@ -49,14 +58,6 @@ type search = {
   }
   options?: {name:string;value:string}[]
 }
-+ searchVisible 为 true 时(默认为false)
-+ 需在 columns 对应表格字段中添加 search 字段；并且**注入cancel 和 submit方法**（方法返回form表单数据);
-
-+ form 支持类型:
-  + input
-  + select（options: {name: string; value: string}[]）
-  + time(options: { time:'range'|'time'|'date'; showTime?:Object | Boolean; format?:string; valueFormat?:string })
-  + 自定义表单组件（下边讲述使用方式）
 ```
 
 ```
@@ -102,12 +103,13 @@ type search = {
 
 #### 支持自定义表单元素插槽
 
+**自定义表格元素时需在 search 字段：slot 字段： 对应添加在<ji-table> 中的自定义元素插槽 name**
+**且插槽*提供 fromState 字段*对应 form 表单对象,将自定义表单属性可关联到 form 表单对象中;**
+
 ```
 type search = {
   slot: string
 }
-__自定义表格元素时需在 search 字段：slot字段： 对应添加在<ji-table> 中的自定义元素插槽name__
-__且插槽*提供fromState字段*对应form表单对象,将自定义表单属性可关联到form表单对象中;__
 ```
 
 ```
