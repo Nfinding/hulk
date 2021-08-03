@@ -10,6 +10,7 @@
       ></slot>
 
       <a-form-item
+        class="serach-item"
         v-for="(item, index) in formOptions.filter(
           (item) => !!item.search.type
         )"
@@ -37,15 +38,15 @@
         </a-select>
         <component
           v-else-if="item.search.type === 'time'"
-          :is="`a-${item.search.options.type}-Picker`"
+          :is="`a-${item.search.attrs.type}-Picker`"
           v-model:value="formState[item.key]"
           valueFormat="YYYY-MM-DD HH:mm:ss"
           format="YYYY-MM-DD HH:mm:ss"
           v-bind="item.search.attrs"
         ></component>
       </a-form-item>
-      <a-form-item label="Activity time"> </a-form-item>
-      <a-form-item>
+      <!-- <a-form-item class="serach-item" label="Activity time"> </a-form-item> -->
+      <a-form-item class="serach-item">
         <a-space>
           <a-button type="primary" @click="onSubmit">{{ submit }}</a-button>
           <a-button @click="onCancel">{{ cancel }}</a-button>
@@ -118,4 +119,10 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+.ji-table-search {
+  .serach-item {
+    margin-bottom: 10px;
+  }
+}
+</style>
