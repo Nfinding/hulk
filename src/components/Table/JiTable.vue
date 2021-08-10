@@ -19,13 +19,14 @@
         </template>
       </search-from>
     </slot>
-    <slot name="handle">
+    <!--TODO 自定义操作区 -->
+    <!-- <slot name="handle">
       <a-row justify="end">
         <a-space align="end">
           <a-button>编辑</a-button>
         </a-space>
       </a-row>
-    </slot>
+    </slot> -->
     <a-table :columns="formatColumns" v-bind="$attrs">
       <!-- 支持自定义元素 -->
       <template

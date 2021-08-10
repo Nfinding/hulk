@@ -72,7 +72,7 @@ import 'slbasic/dist/style.css'
 ...
 ```
 
-[JiTable 用法](https://gitlab.jiliguala.com/h5/growth/infra/pc-components/-/tree/master/src/components/Table)
+[JiTable 用法](https://github.com/Nfinding/hulk/tree/master/src/components/Table)
 
 ## 五、TODO
 
